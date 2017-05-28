@@ -1,0 +1,18 @@
+{
+  "name": "node.js-chat",
+  "version": "1.0.0",
+  "description": "Ein einfacher WebChat mit Node.js",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node.js",
+    "webchat"
+  ],
+  "author": "Moritz Meyer",
+  "dependencies" : {
+		"express": "3.x",
+		"socket.io": "*"
+	}
+}
