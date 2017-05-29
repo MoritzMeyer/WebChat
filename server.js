@@ -2,11 +2,12 @@ var express = require('express')
 ,   app = express()
 ,   server = require('http').createServer(app)
 ,   io = require('socket.io').listen(server)
-,   conf = require('./config.json');
+,   conf = require('./config.json')
+,   port = process.env.Port || 3000;
 
 // Webserver
 // auf den Port x schalten
-server.listen(conf.port);
+server.listen(port);
 
 app.configure(function(){
 	// statische Dateien ausliefern
