@@ -10,5 +10,9 @@
     "node.js",
     "webchat"
   ],
-  "author": "Moritz Meyer"
+  "author": "Moritz Meyer",
+"dependencies" : {
+		"express": "*",
+		"socket.io": "*"
+	}
 }
