@@ -37,7 +37,7 @@ io.sockets.on('connection', function (socket) {
 });
 
 app.post('/vmcreatedinfo', function(req, res) {
-	console.log("Server created: " + requ.body);
+	console.log("Server created: " + req.body);
 	//serverEmitter.emit('vm', req.body);
 	io.sockets.emit('chat', {zeit: new Date(), name: 'VM-Update', text: req.body});
 });
