@@ -3,7 +3,9 @@ var express = require('express')
 ,   server = require('http').createServer(app)
 ,   io = require('socket.io').listen(server)
 ,   conf = require('./config.json')
-,   port = process.env.Port || 3000;
+,   port = process.env.Port || 3000
+,	events = require('events')
+,	serverEmitter = new events.EventEmitter();
 
 // Webserver
 // auf den Port x schalten
@@ -29,7 +31,15 @@ io.sockets.on('connection', function (socket) {
 		// so wird dieser Text an alle anderen Benutzer gesendet
 		io.sockets.emit('chat', { zeit: new Date(), name: data.name || 'Anonym', text: data.text });
 	});
+	serverEmitter.on('vm', function (data) {
+		io.sockets.emit('chat', {zeit: new Date(), text:'Server created: ' + data);
+	});
 });
 
 // Portnummer in die Konsole schreiben
 console.log('Der Server läuft nun unter http://127.0.0.1:' + conf.port + '/');
+
+app.post('/vmcreatedinfo', function(req, res) {
+	console.log("Server created: " + requ.body);
+	serverEmitter.emit('vm', req.body);
+});
