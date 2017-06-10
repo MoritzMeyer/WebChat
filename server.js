@@ -40,6 +40,7 @@ app.post('/vmcreatedinfo', function(req, res) {
 	console.log("Server created: " + req.body);
 	//serverEmitter.emit('vm', req.body);
 	io.sockets.emit('chat', {zeit: new Date(), name: 'VM-Update', text: req.body});
+	res.status(200);
 });
 
 // Portnummer in die Konsole schreiben
