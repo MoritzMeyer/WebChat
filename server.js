@@ -37,10 +37,11 @@ io.sockets.on('connection', function (socket) {
 });
 
 app.post('/vmcreatedinfo', function(req, res) {
-	console.log("Server created: " + req.body);
+	console.debug("Server created: " + req.body);
 	//serverEmitter.emit('vm', req.body);
-	io.sockets.emit('chat', {zeit: new Date(), name: 'VM-Update', text: req.body});
+	io.sockets.emit('chat', {zeit: new Date(), name: 'VM-Update', text: JSON.stringify(req.body)});
 	res.status(200);
+	res.end();
 });
 
 // Portnummer in die Konsole schreiben
