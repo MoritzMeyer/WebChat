@@ -3,7 +3,9 @@ var express = require('express')
 ,   server = require('http').createServer(app)
 ,   io = require('socket.io').listen(server)
 ,   conf = require('./config.json')
-,   port = process.env.Port || 3000;
+,   port = process.env.Port || 3000
+,	bodyParser = require("body-parser")
+,	urlencodedParser = bodyParser.urlencoded({ extended: false });
 //,	events = require('events')
 //,	serverEmitter = new events.EventEmitter();
 
@@ -14,6 +16,7 @@ server.listen(port);
 app.configure(function(){
 	// statische Dateien ausliefern
 	app.use(express.static(__dirname + '/public'));
+	app.use(urlencodedParser);
 });
 
 // wenn der Pfad / aufgerufen wird
