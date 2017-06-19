@@ -56,7 +56,7 @@ app.post('/vmcreatedinfo', function(req, res) {
 	res.end();
 });
 
-auth.authenticate(username, password, function(err, user) {
+auth.authenticate("eva2", "geheim", function(err, user) {
 	console.log("User logged in");
 	console.log("err:", err);
 	io.sockets.emit('chat', {zeit: new Date(), name: 'Ldap-Login', text: JSON.stringify(err)});
