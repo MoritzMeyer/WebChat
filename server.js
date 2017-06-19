@@ -9,6 +9,16 @@ var express = require('express')
 //,	events = require('events')
 //,	serverEmitter = new events.EventEmitter();
 
+var LdapAuth = require('ldapauth');
+var options = {
+    url: 'ldap://10.0.0.4:389',
+    adminDn: "cn=admin,dc=ilg5tlvpyu5efa4joxmvczbo4c,dc=ax,dc=internal,dc=cloudapp,dc=net",
+    adminPassword: "root",
+    searchBase: "dc=ilg5tlvpyu5efa4joxmvczbo4c,dc=ax,dc=internal,dc=cloudapp,dc=net",
+    searchFilter: "(uid={{username}})"
+};
+var auth = new LdapAuth(options);
+
 // Webserver
 // auf den Port x schalten
 server.listen(port);
@@ -45,6 +55,17 @@ app.post('/vmcreatedinfo', function(req, res) {
 	io.sockets.emit('chat', {zeit: new Date(), name: 'VM-Update', text: JSON.stringify(req.body)});
 	res.status(200);
 	res.end();
+});
+
+auth.authenticate(username, password, function(err, user) {
+	console.log("User logged in");
+	console.log("err:", err);
+	io.sockets.emit('chat', {zeit: new Date(), name: 'Ldap-Login', text: JSON.stringify(err)});
+	io.sockets.emit('chat', {zeit: new Date(), name: 'Ldap-Login', text: JSON.stringify(user)});
+});
+
+auth.close(function(err) {
+	console.log("On close: ", err);
 });
 
 // Portnummer in die Konsole schreiben
