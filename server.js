@@ -23,11 +23,10 @@ var auth = new LdapAuth(options);
 // auf den Port x schalten
 server.listen(port);
 
-app.configure(function(){
-	// statische Dateien ausliefern
-	app.use(express.static(__dirname + '/public'));
-	app.use(urlencodedParser);
-});
+// statische Dateien ausliefern
+app.use(express.static(__dirname + '/public'));
+app.use(urlencodedParser);
+
 
 // wenn der Pfad / aufgerufen wird
 app.get('/', function (req, res) {
