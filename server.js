@@ -11,7 +11,7 @@ var express = require('express')
 
 var LdapAuth = require('ldapauth');
 var options = {
-    url: 'ldap://10.0.0.4:389',
+    url: 'ldap://52.174.40.229:389',
     adminDn: "cn=admin,dc=ilg5tlvpyu5efa4joxmvczbo4c,dc=ax,dc=internal,dc=cloudapp,dc=net",
     adminPassword: "root",
     searchBase: "dc=ilg5tlvpyu5efa4joxmvczbo4c,dc=ax,dc=internal,dc=cloudapp,dc=net",
@@ -56,15 +56,17 @@ app.post('/vmcreatedinfo', function(req, res) {
 	res.end();
 });
 
-auth.authenticate("eva2", "geheim", function(err, user) {
-	console.log("User logged in");
-	console.log("err:", err);
-	io.sockets.emit('chat', {zeit: new Date(), name: 'Ldap-Login', text: JSON.stringify(err)});
-	io.sockets.emit('chat', {zeit: new Date(), name: 'Ldap-Login', text: JSON.stringify(user)});
-});
+auth.once('connect', function () {
+	auth.authenticate("eva2", "geheim", function(err, user) {
+		console.log("User logged in");
+		console.log("err:", err);
+		io.sockets.emit('chat', {zeit: new Date(), name: 'Ldap-Login', text: JSON.stringify(err)});
+		io.sockets.emit('chat', {zeit: new Date(), name: 'Ldap-Login', text: JSON.stringify(user)});
+	});
 
-auth.close(function(err) {
-	console.log("On close: ", err);
+	/*auth.close(function(err) {
+		console.log("On close: ", err);
+	});*/
 });
 
 // Portnummer in die Konsole schreiben
