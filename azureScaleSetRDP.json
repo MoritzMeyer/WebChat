@@ -59,20 +59,14 @@
     "publicIPAddressID": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]",
     "lbID": "[resourceId('Microsoft.Network/loadBalancers',variables('loadBalancerName'))]",
     "natPoolNameSSH": "[concat(variables('namingInfix'), 'natpoolSSH')]",
-    "bePoolNameSSH": "[concat(variables('namingInfix'), 'bepoolSSH')]",
+    "natPoolNameRDP": "[concat(variables('namingInfix'), 'natpoolRDP')]",
+    "bePoolName": "[concat(variables('namingInfix'), 'bepool')]",
     "natStartPortSSH": 50000,
     "natEndPortSSH": 50100,
     "natBackendPortRDP": 22,
-    "natPoolNameRDP": "[concat(variables('namingInfix'), 'natpoolRDP')]",
-    "bePoolNameRDP": "[concat(variables('namingInfix'), 'bepoolRDP')]",
     "natStartPortRDP": 55000,
     "natEndPortRDP": 55100,
     "natBackendPortRDP": 3389,
-    "natPoolNameLDAP": "[concat(variables('namingInfix'), 'natpoolLDAP')]",
-    "bePoolNameLDAP": "[concat(variables('namingInfix'), 'bepoolLDAP')]",
-    "natStartPortLDAP": 60000,
-    "natEndPortLDAP": 60100,
-    "natBackendPortLDAP": 389,
     "nicName": "[concat(variables('namingInfix'), 'nic')]",
     "ipConfigName": "[concat(variables('namingInfix'), 'ipconfig')]",
     "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontEnd')]",
@@ -143,13 +137,7 @@
         ],
         "backendAddressPools": [
           {
-            "name": "[variables('bePoolNameSSH')]"
-          },
-          {
-            "name": "[variables('bePoolNameRDP')]"
-          },
-          {
-            "name": "[variables('bePoolNameLDAP')]"
+            "name": "[variables('bePoolName')]"
           }
         ],
         "inboundNatPools": [
@@ -175,18 +163,6 @@
               "frontendPortRangeStart": "[variables('natStartPortRDP')]",
               "frontendPortRangeEnd": "[variables('natEndPortRDP')]",
               "backendPort": "[variables('natBackendPortRDP')]"
-            }
-          },
-          {
-            "name": "[variables('natPoolNameLDAP')]",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[variables('frontEndIPConfigID')]"
-              },
-              "protocol": "tcp",
-              "frontendPortRangeStart": "[variables('natStartPortLDAP')]",
-              "frontendPortRangeEnd": "[variables('natEndPortLDAP')]",
-              "backendPort": "[variables('natBackendPortLDAP')]"
             }
           }
         ]
@@ -239,13 +215,7 @@
                         },
                         "loadBalancerBackendAddressPools": [
                           {
-                            "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/backendAddressPools/', variables('bePoolNameSSH'))]"
-                          },
-                          {
-                            "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/backendAddressPools/', variables('bePoolNameRDP'))]"
-                          },
-                          {
-                            "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/backendAddressPools/', variables('bePoolNameLDAP'))]"
+                            "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/backendAddressPools/', variables('bePoolName'))]"
                           }
                         ],
                         "loadBalancerInboundNatPools": [
@@ -254,9 +224,6 @@
                           },
                           {
                             "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/inboundNatPools/', variables('natPoolNameRDP'))]"
-                          },
-                          {
-                            "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/inboundNatPools/', variables('natPoolNameLDAP'))]"
                           }
                         ]
                       }
@@ -297,7 +264,7 @@
                   "metricResourceUri": "[concat('/subscriptions/',subscription().subscriptionId, '/resourceGroups/',  resourceGroup().name, '/providers/Microsoft.Compute/virtualMachineScaleSets/', variables('namingInfix'))]",
                   "timeGrain": "PT1M",
                   "statistic": "Average",
-                  "timeWindow": "PT1M",
+                  "timeWindow": "PT5M",
                   "timeAggregation": "Average",
                   "operator": "GreaterThan",
                   "threshold": 75.0
@@ -305,8 +272,8 @@
                 "scaleAction": {
                   "direction": "Increase",
                   "type": "ChangeCount",
-                  "value": "1",
-                  "cooldown": "PT1M"
+                  "value": "2",
+                  "cooldown": "PT3M"
                 }
               },
               {
@@ -316,7 +283,7 @@
                   "metricResourceUri": "[concat('/subscriptions/',subscription().subscriptionId, '/resourceGroups/',  resourceGroup().name, '/providers/Microsoft.Compute/virtualMachineScaleSets/', variables('namingInfix'))]",
                   "timeGrain": "PT1M",
                   "statistic": "Average",
-                  "timeWindow": "PT1M",
+                  "timeWindow": "PT5M",
                   "timeAggregation": "Average",
                   "operator": "LessThan",
                   "threshold": 25.0
