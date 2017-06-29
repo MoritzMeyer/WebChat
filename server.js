@@ -11,10 +11,10 @@ var express = require('express')
 
 var LdapAuth = require('ldapauth');
 var options = {
-    url: 'ldap://52.174.40.229:389',
-    adminDn: "cn=admin,dc=ilg5tlvpyu5efa4joxmvczbo4c,dc=ax,dc=internal,dc=cloudapp,dc=net",
+    url: 'ldap://52.233.129.104:389',
+    adminDn: "cn=admin,dc=gamingservice,dc=cc",
     adminPassword: "root",
-    searchBase: "dc=ilg5tlvpyu5efa4joxmvczbo4c,dc=ax,dc=internal,dc=cloudapp,dc=net",
+    searchBase: "dc=gamingservice,dc=cc",
     searchFilter: "(uid={{username}})"
 };
 var auth = new LdapAuth(options);
@@ -57,7 +57,7 @@ app.post('/vmcreatedinfo', function(req, res) {
 });
 
 auth.once('connect', function () {
-	auth.authenticate("eva2", "geheim", function(err, user) {
+	auth.authenticate("eva", "eva", function(err, user) {
 		console.log("User logged in");
 		console.log("err:", err);
 		io.sockets.emit('chat', {zeit: new Date(), name: 'Ldap-Login', text: JSON.stringify(err)});
