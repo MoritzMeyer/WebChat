@@ -63,7 +63,7 @@
     "bePoolName": "[concat(variables('namingInfix'), 'bepool')]",
     "natStartPortSSH": 50000,
     "natEndPortSSH": 50100,
-    "natBackendPortRDP": 22,
+    "natBackendPortSSH": 22,
     "natStartPortRDP": 55000,
     "natEndPortRDP": 55100,
     "natBackendPortRDP": 3389,
